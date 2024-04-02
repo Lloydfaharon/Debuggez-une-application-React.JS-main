@@ -13,11 +13,12 @@ const EventList = () => {
   const { data, error } = useData();
   const [type, setType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  
   const filteredEvents = (
     (!type
+      // Affiche tous les événements
       ? data?.events
-      : data?.events) || []
+      // Permet de filtrer les événements en fonction de leur type
+      : data?.events.filter((event) => event.type === type)) || []
   ).filter((event, index) => {
     if (
       (currentPage - 1) * PER_PAGE <= index &&
@@ -45,7 +46,7 @@ const EventList = () => {
             selection={Array.from(typeList)}
             onChange={(value) => (value ? changeType(value) : changeType(null))}
           />
-          <div id="events" className="ListContainer">
+          <div id="events" className="ListContainer" data-testid="listEvents">
             {filteredEvents.map((event) => (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => (
